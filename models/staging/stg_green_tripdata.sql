@@ -6,6 +6,7 @@
 
 select
     -- identifiers
+    {{ dbt_utils.generate_surrogate_key(['vendor_id', 'pickup_datetime']) }} as tripid,
     cast(vendor_id as integer) as vendorid,
     cast(rate_code as numeric) as ratecodeid,
     cast(pickup_location_id as integer) as pickup_locationid,
@@ -30,6 +31,14 @@ select
     cast(ehail_fee as numeric) as ehail_fee,
     cast(imp_surcharge as numeric) as improvement_surcharge,
     cast(total_amount as numeric) as total_amount,
-    cast(payment_type as numeric) as payment_type
+    cast(payment_type as numeric) as payment_type,
+    {{ get_payment_type_description('payment_type') }} as payment_type_description
 from {{ source('staging','green_tripdata') }}
-limit 100
+where vendor_id is not null
+
+-- dbt build --select <model_name> --vars '{'is_test_run': 'false'}'
+{% if var('is_test_run', default=true) %}
+
+  limit 100
+
+{% endif %}
