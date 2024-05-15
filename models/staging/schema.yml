@@ -3,10 +3,11 @@ version: 2
 sources:
   - name: staging
     database: coherent-surf-415008
-    schema: trips_data_all
+    schema: final_dataset
 
     tables:
-      - name: green_tripdata
-      - name: yellow_tripdata
-      - name: fhv_tripdata
+      - name: organograms23
+      - name: organograms22
+      - name: organograms21
+      - name: organograms20
       
